@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match History - Young 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-main: 'Poppins', sans-serif;
+            --bg-dark: #000428;
+            /* Deep Blue Gradient */
+            --bg-gradient: linear-gradient(to bottom, #000428, #004e92);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-main: #fff;
+            --accent-cyan: #00d2ff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 20px;
+            background: rgba(0, 4, 40, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        /* --- CONTROLS (Search + Sort) --- */
+        .controls {
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-family: inherit;
+        }
+
+        .sort-select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: #004e92;
+            color: white;
+            font-family: inherit;
+        }
+
+        /* --- MATCH TIMELINE --- */
+        .container {
+            padding: 10px 20px 80px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .match-card {
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent-cyan);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .match-card:active { transform: scale(0.98); }
+
+        .match-date {
+            font-size: 0.75rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .teams {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .vs { color: #00d2ff; font-size: 0.9rem; margin: 0 5px; }
+
+        .result-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .won { background: rgba(0, 230, 118, 0.2); color: #00e676; border: 1px solid #00e676; }
+        .lost { background: rgba(255, 23, 68, 0.2); color: #ff1744; border: 1px solid #ff1744; }
+        .draw { background: rgba(255, 152, 0, 0.2); color: #ff9800; border: 1px solid #ff9800; }
+
+        /* Loader */
+        #loader { text-align: center; color: var(--accent-cyan); padding: 20px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="window.history.back()">←</button>
+        <h1 class="page-title">Match Feed</h1>
+        <div style="width: 24px;"></div> </header>
+
+    <div class="controls">
+        <input type="text" id="searchInput" class="search-box" placeholder="Search team..." onkeyup="filterMatches()">
+        <select id="sortSelect" class="sort-select" onchange="sortMatches()">
+            <option value="recent">Recent</option>
+            <option value="oldest">Oldest</option>
+        </select>
+    </div>
+
+    <div class="container" id="match-container">
+        <div id="loader">Loading Match History...</div>
+        </div>
+
+    <script>
+        // --- GOOGLE SHEET CONFIG ---
+        // Headers required: Date, Team1, Team2, Result, Winner
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vREKaKTXhXb5behRXszZ2HlJAKv_h7fYFk_wqy-wKvxwLNcUv5T22HyL0CFtWhwD2frj0Cs6QT6UljV/pub?gid=0&single=true&output=csv"; 
+
+        // --- SAMPLE DATA ---
+        let allMatches = [
+            { date: "16 Feb 2026", team1: "CSK", team2: "RCB", result: "RCB Won by 4 wkts", winner: "Lost" },
+            { date: "14 Feb 2026", team1: "GT", team2: "MI", result: "MI Won by 10 runs", winner: "Won" },
+            { date: "10 Jan 2026", team1: "Young 11", team2: "Local Kings", result: "Young 11 Won by 20 runs", winner: "Won" }
+        ];
+
+        function renderMatches(data) {
+            const container = document.getElementById('match-container');
+            
+            // 1. Clear the container (Removes loader automatically)
+            container.innerHTML = "";
+
+            // 2. Build all HTML in one go (Faster)
+            let fullHtml = "";
+
+            if(data.length === 0) {
+                container.innerHTML = "<div style='text-align:center; color:#888; margin-top:20px;'>No matches found.</div>";
+                return;
+            }
+
+            data.forEach(m => {
+                // Determine Badge Color
+                let badgeClass = "draw";
+                if(m.winner && m.winner.toLowerCase().includes("won")) badgeClass = "won";
+                if(m.winner && m.winner.toLowerCase().includes("lost")) badgeClass = "lost";
+
+                fullHtml += `
+                    <div class="match-card">
+                        <span class="match-date">${m.date}</span>
+                        <div class="teams">${m.team1} <span class="vs">VS</span> ${m.team2}</div>
+                        <span class="result-badge ${badgeClass}">${m.result}</span>
+                    </div>
+                `;
+            });
+
+            // 3. Inject HTML
+            container.innerHTML = fullHtml;
+        }
+
+        // --- SEARCH & SORT LOGIC ---
+        function filterMatches() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allMatches.filter(m => 
+                (m.team1 && m.team1.toLowerCase().includes(query)) || 
+                (m.team2 && m.team2.toLowerCase().includes(query)) ||
+                (m.date && m.date.toLowerCase().includes(query))
+            );
+            renderMatches(filtered);
+        }
+
+        function sortMatches() {
+            const sortType = document.getElementById('sortSelect').value;
+            const sorted = [...allMatches];
+            if(sortType === "oldest") sorted.reverse();
+            renderMatches(sorted);
+        }
+
+        // --- FETCH DATA ---
+        async function fetchMatches() {
+            // Check if link is empty
+            if(!SHEET_CSV_URL) {
+                console.log("No sheet linked, using sample data.");
+                setTimeout(() => renderMatches(allMatches), 500);
+                return;
+            }
+
+            try {
+                const res = await fetch(SHEET_CSV_URL);
+                const text = await res.text();
+                
+                // Split by new line and filter out empty rows
+                const rows = text.split('\n').filter(row => row.trim() !== "");
+                
+                // Skip header (slice 1) and map
+                const parsedData = rows.slice(1).map(r => {
+                    const c = r.split(',');
+                    // Ensure we have enough columns to avoid errors
+                    if(c.length < 5) return null; 
+                    
+                    return { 
+                        date: c[0].trim(), 
+                        team1: c[1].trim(), 
+                        team2: c[2].trim(), 
+                        result: c[3].trim(), 
+                        winner: c[4].trim().replace(/['"]+/g, '') // Remove quotes if any
+                    };
+                }).filter(x => x !== null); // Remove any failed rows
+
+                allMatches = parsedData; // Update global data
+                renderMatches(allMatches);
+
+            } catch(e) { 
+                console.error("Error fetching matches:", e); 
+                renderMatches(allMatches); // Fallback to sample
+            }
+        }
+
+        fetchMatches();
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Fame - Young 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-main: 'Poppins', sans-serif;
+            --bg-dark: #141e30;
+            /* Gold/Royal Gradient */
+            --bg-gradient: linear-gradient(to right, #243b55, #141e30);
+            --gold-grad: linear-gradient(45deg, #f09819, #edde5d);
+            --text-gold: #f09819;
+            --card-surface: #1f2c40;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: var(--gold-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            text-shadow: 0 5px 15px rgba(240, 152, 25, 0.3);
+        }
+
+        /* --- DESCRIPTION BOX --- */
+        .desc-box {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(240, 152, 25, 0.3);
+            margin: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ddd;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            top: -5px; /* Pop-out effect */
+        }
+
+        /* --- ACCORDION SECTIONS --- */
+        .container { padding: 0 20px 80px; }
+
+        .accordion-btn {
+            background: var(--card-surface);
+            color: white;
+            cursor: pointer;
+            padding: 20px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: 0.4s;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-left: 5px solid #f09819;
+        }
+
+        .active, .accordion-btn:hover {
+            background: #2c3e50;
+        }
+
+        .panel {
+            padding: 0 18px;
+            background-color: rgba(0,0,0,0.2);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            border-radius: 0 0 12px 12px;
+            margin-bottom: 20px;
+        }
+
+        /* List Items inside Panel */
+        .honor-list { list-style: none; padding: 15px 0; margin: 0; }
+        
+        .honor-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .honor-item:last-child { border: none; }
+
+        .honor-name { font-weight: 600; color: #fff; }
+        .honor-date { color: var(--text-gold); font-size: 0.9rem; }
+        .trophy-icon { margin-right: 10px; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="window.history.back()">←</button>
+        <h1 class="page-title">Banner</h1>
+    </header>
+
+    <div class="desc-box">
+        Here we celebrate the legends. The trophies we lifted, the players who shined, and the moments that defined Young 11.
+    </div>
+
+    <div class="container">
+
+        <button class="accordion-btn">Player of Month <span>▼</span></button>
+        <div class="panel">
+            <ul class="honor-list" id="list-month">
+                <li class="honor-item"><span class="honor-name">Loading...</span></li>
+            </ul>
+        </div>
+
+        <button class="accordion-btn">Player of Year <span>▼</span></button>
+        <div class="panel">
+            <ul class="honor-list" id="list-year">
+                <li class="honor-item"><span class="honor-name">Loading...</span></li>
+            </ul>
+        </div>
+
+        <button class="accordion-btn">Titles & Trophies <span>▼</span></button>
+        <div class="panel">
+            <ul class="honor-list" id="list-title">
+                <li class="honor-item"><span class="honor-name">Loading...</span></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        // --- ACCORDION LOGIC ---
+        var acc = document.getElementsByClassName("accordion-btn");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                } 
+            });
+        }
+
+        // --- DATA LOGIC ---
+        // Sheet Headers: Category, Name, Date/Year
+        // Category options: "Month", "Year", "Title"
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQaxNgt5C8-ZOOXAAbbihudgwZS6tGqiRSSf-jb0o2usFn8--ks8wGK9hu-7NqVI2oTemDURaChYdQW/pub?gid=0&single=true&output=csv"; 
+
+        const sampleData = [
+            { category: "Month", name: "Haziq", date: "Jan 2026" },
+            { category: "Month", name: "Murtaza", date: "Dec 2025" },
+            { category: "Year", name: "Mir Shakeel", date: "2025" },
+            { category: "Title", name: "Winter Cup Winner", date: "2025" }
+        ];
+
+        function renderHonors(data) {
+            const listMonth = document.getElementById('list-month');
+            const listYear = document.getElementById('list-year');
+            const listTitle = document.getElementById('list-title');
+
+            listMonth.innerHTML = "";
+            listYear.innerHTML = "";
+            listTitle.innerHTML = "";
+
+            data.forEach(item => {
+                const html = `
+                    <li class="honor-item">
+                        <span class="honor-name">⭐ ${item.name}</span>
+                        <span class="honor-date">${item.date}</span>
+                    </li>`;
+
+                if(item.category === "Month") listMonth.innerHTML += html;
+                if(item.category === "Year") listYear.innerHTML += html;
+                if(item.category === "Title") listTitle.innerHTML += html;
+            });
+        }
+
+        async function fetchData() {
+            if(!SHEET_CSV_URL) {
+                renderHonors(sampleData);
+                return;
+            }
+            try {
+                const res = await fetch(SHEET_CSV_URL);
+                const text = await res.text();
+                const rows = text.split('\n').slice(1);
+                
+                const parsed = rows.map(r => {
+                    const c = r.split(',');
+                    if(c.length < 3) return null;
+                    return { category: c[0], name: c[1], date: c[2].replace('\r','') };
+                }).filter(x => x);
+
+                renderHonors(parsed);
+            } catch(e) { renderHonors(sampleData); }
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>

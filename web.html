@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Young 11 Cricket Club</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="web.css">
+</head>
+<body>
+
+    <div class="version-badge">v1.0</div>
+
+    <main class="dashboard-container">
+        
+        <header class="hero-section">
+            <div class="banner-overlay"></div>
+            <h1 class="club-title">Young-11 <br>Cricket Club</h1>
+        </header>
+
+        <div class="identity-section">
+            <div class="logo-circle">
+                <img src="assets/logo.png" alt="Club Logo" class="logo-img">
+            </div>
+            
+            <div class="splash-container">
+                <span id="splash-text" class="minecraft-splash">Loading...</span>
+            </div>
+        </div>
+
+        <section class="control-grid">
+            <button class="dash-btn btn-team" onclick="window.location.href='team.html'">
+                <span class="btn-icon">🏏</span>
+                <span class="btn-label">Team</span>
+            </button>
+
+            <button class="dash-btn btn-tourna" onclick="window.location.href='tournament.html'">
+                <span class="btn-icon">🏆</span>
+                <span class="btn-label">Tournaments</span>
+            </button>
+
+            <button class="dash-btn btn-match" onclick="window.location.href='matches.html'">
+                <span class="btn-icon">📅</span>
+                <span class="btn-label">Matches</span>
+            </button>
+
+            <button class="dash-btn btn-banner" onclick="window.location.href='banner.html'">
+                <span class="btn-icon">⭐</span>
+                <span class="btn-label">Banner</span>
+            </button>
+        </section>
+
+        <section class="info-card news-section">
+            <h2 class="section-title">Latest News</h2>
+            
+           <!-- <div class="news-image-box">
+                <p>No Image Available</p>
+            </div> -->
+            
+            <img src="assets/banner.jpg" alt="Season 2026" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid #444;">
+            
+            <div class="news-content">
+                <h3>Season 2026 Begins!</h3>
+                <p>The squad is warming up for the upcoming tournaments. Follow official the page @young_11_cricket on Instagram...</p>
+            </div>
+        </section>
+
+        <section class="info-card analysis-section">
+            <h2 class="section-title">Performance Analysis</h2>
+            <p class="disclaimer">
+                ⚠️ This section is based on automated analysis integration. Any analytic data or token is auto generated and doesn't guarantee systematic accuracy. (AMAI™)
+            </p>
+            <button class="view-analysis-btn" onclick= "window.location.href='analysis.html'">View Analysis 📊</button>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>© Copyright 2025 Young 11 Cricket Club; Reserved ®Axis Core</p>
+        </footer>
+
+        <div style="height: 80px;"></div>
+
+    </main>
+
+    <nav class="bottom-toolbar">
+        <button class="tool-btn"><img src="assets/info-icon.png" alt="i"></button>
+        <button class="tool-btn"><img src="assets/social-icon.png" alt="s"></button>
+        <button class="tool-btn"><img src="assets/dev-icon.png" alt="a"></button>
+        <button class="tool-btn"><img src="assets/vers-icon.png" alt="v"></button>
+    </nav>
+
+<button class="nav-back-btn" onclick="goBack()">
+    ←
+</button>
+    <script>
+        const splashes = [
+    "Do your homework first!",
+    "We love you!",
+    "Howzat?!",
+    "Rohit or Kohli?",
+    "Also try Football",
+    "Don't drop the catch.",
+    "Umpire is sleeping...",
+    "Hacker...",
+    "Yorker King!",
+    "Do you love us!?",
+    "Clean Bowled.",
+    "Where is the ball!",
+    "Million lines of code",
+    "No Ducks Allowed!",
+    "Captain is watching.",
+    "A tribute to Baba Farhaan!",
+    "Forged by passion, Defined by Results",
+    "Follow @a.xiscore on Instagram"
+    
+];
+
+const splashElement = document.getElementById('splash-text');
+
+function updateSplash() {
+    // 1. Pick a random quote
+    const randomSplash = splashes[Math.floor(Math.random() * splashes.length)];
+    
+    // 2. Add a slight random tilt (Minecraft style)
+    const rotation = Math.random() > 0.5? -4 : 4; 
+    
+    // 3. Apply the text and rotation
+    splashElement.innerText = randomSplash;
+    splashElement.style.transform = `scale(1) rotate(${rotation}deg)`;
+}
+
+// Run once on load
+updateSplash();
+
+// Change the text every 4 seconds (4000 milliseconds)
+setInterval(updateSplash, 3000);
+
+function goBack() {
+    // If we are on a main sub-page, go to Home Menu.
+    // If we are deep inside (like team.html), go back to Dashboard (web.html)
+
+    const path = window.location.pathname;
+
+    // If on Dashboard, go to Main Menu
+    if(path.includes('web.html')) {
+        window.location.href = 'index.html';
+    } 
+    // If on Register, go to Main Menu
+    else if(path.includes('register.html')) {
+        window.location.href = 'home.html';
+    }
+    // For everything else (Team, Matches, etc.), simple history back works best
+    else {
+        window.history.back();
+    }
+}
+    </script>
+    <script src="toolbar.js"></script>
+</body>
+</body>
+</html>

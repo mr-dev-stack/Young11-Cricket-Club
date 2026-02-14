@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Young 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; background: #000; color: white; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 90vh; }
+        
+        .profile-card {
+            width: 85%; max-width: 400px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+            border: 1px solid #333; border-radius: 20px;
+            padding: 30px 20px; text-align: center; position: relative;
+        }
+        
+        /* Glowing Avatar Circle */
+        .avatar {
+            width: 100px; height: 100px; background: #333; border-radius: 50%;
+            margin: 0 auto 15px; border: 3px solid #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            overflow: hidden;
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        h1 { margin: 0; font-size: 1.8rem; background: linear-gradient(to right, #00ff88, #00b8ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .role { color: #888; font-size: 0.9rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Stats Grid */
+        .stats { display: flex; justify-content: space-between; margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; }
+        .stat-box { flex: 1; }
+        .stat-num { font-size: 1.5rem; font-weight: 700; color: white; display: block; }
+        .stat-label { font-size: 0.7rem; color: #555; }
+    </style>
+</head>
+<body>
+
+    <div class="profile-card">
+        <div class="avatar">
+            <img src="assets/axiscore-logo.png" alt="Dev"> 
+        </div>
+        <h1>Haziq</h1>
+        <div class="role">Lead Developer</div>
+        <p style="color: #aaa; font-size: 0.9rem;">
+            A dedicated web developer with expertise in HTML, CSS and JavaScript, delivering high-quality, responsive, and elegant web solutions. Focused on performance, structure, and modern design standards, I build websites that reflect professionalism, reliability, and long-term value. <br>  •Built with Knowledge, Passion and some Coffee!
+        </p>
+
+        <div class="stats">
+            <div class="stat-box">
+                <span class="stat-num">v1.0</span>
+                <span class="stat-label">Version</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num">100%</span>
+                <span class="stat-label">Uptime</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num">∞</span>
+                <span class="stat-label">Passion</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="toolbar.js"></script>
+</body>
+</html>

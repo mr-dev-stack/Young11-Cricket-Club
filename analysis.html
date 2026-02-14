@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMIA Analysis - Young 11</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080808;
+            --surface: #121212;
+            --font-main: 'Poppins', sans-serif;
+            /* Rainbow Gradient */
+            --rainbow: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER SECTION --- */
+        header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background: radial-gradient(circle at top, #1a1a1a, #080808);
+            border-bottom: 1px solid #333;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .amia-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin: 0;
+            color: white;
+            display: inline-block;
+            border: 3px solid white;
+            padding: 5px 15px;
+            border-radius: 8px;
+        }
+
+        .rainbow-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: var(--rainbow);
+            background-size: 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow-move 10s linear infinite;
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes rainbow-move {
+            0% { background-position: 0%; }
+            100% { background-position: 400%; }
+        }
+
+        /* Changing Text */
+        .dynamic-status {
+            height: 20px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #888;
+            font-style: italic;
+        }
+
+        .desc-box {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 20px;
+            text-align: center;
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .disclaimer {
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        /* --- CHARTS CONTAINER --- */
+        .container {
+            padding: 20px;
+            padding-bottom: 80px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .chart-card {
+            background: var(--surface);
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .chart-title {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            color: #ddd;
+            border-left: 4px solid;
+            padding-left: 10px;
+        }
+
+        /* Tips Section */
+        .tips-card {
+            border-left: 4px solid #00ffd5;
+            background: linear-gradient(135deg, #121212, #0d1f1c);
+        }
+
+        .tips-content {
+            font-family: 'Courier New', monospace;
+            color: #00ffd5;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 60px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: #444;
+            font-size: 0.8rem;
+            padding: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="window.history.back()">←</button>
+        <div class="amia-logo">AMIA</div>
+        <div class="rainbow-text">Axis Mathematical Integrated Analyzer</div>
+        
+        <div class="dynamic-status" id="status-text">Initializing core modules...</div>
+
+        <div class="desc-box">
+            <p>AMIA utilizes advanced algorithmic metrics to process squad performance data. This automated system identifies strategic gaps and optimizes win probability through statistical modeling.</p>
+            <p class="disclaimer">⚠️ DISCLAIMER: Data is auto-generated based on input parameters. System accuracy depends on raw data integrity.</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="chart-card">
+            <h3 class="chart-title" style="border-color: #ff00c8;">Squad Composition Balance</h3>
+            <canvas id="balanceChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3 class="chart-title" style="border-color: #48ff00;">Performance Trajectory</h3>
+            <canvas id="improveChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h3 class="chart-title" style="border-color: #002bff;">Bowling Arsenal Split</h3>
+            <canvas id="bowlingChart"></canvas>
+        </div>
+
+        <div class="chart-card tips-card">
+            <h3 class="chart-title" style="border-color: #00ffd5;">System Generated Insights</h3>
+            <div class="tips-content" id="tips-text">
+                > Connecting to server...<br>
+                > Fetching tactical data...
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        AMIA™ System v1.0 • ©Axis Core ; ®Haziq
+    </footer>
+
+    <script>
+        // --- 1. CONFIGURATION ---
+        // Paste your Published CSV Link here:
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRJWDa_deSChYZqLHcbDBKXeSsW7RKOvp3vzdhjjG412w1o4KOzKqnCMyY1gBen4lg6S2l0JI5_i6Vd/pub?gid=0&single=true&output=csv"; 
+
+        // Fallback Data (If sheet fails)
+        const defaultData = {
+            balance: [40, 35, 25], // Batsmen, Bowlers, Others
+            improvement: [65, 82], // Previous, Current
+            bowling: [60, 40],     // Spin, Fast
+            tip: "Focus on reducing extras in the death overs. Top order stability has improved by 15%."
+        };
+
+        // --- 2. DYNAMIC TEXT ---
+        const statuses = [
+            "Calculating win probability...",
+            "Minecraft Lover!",
+            "A tribute to #Farhaan!",
+            "Why don't you try Football???",
+           "Limited Edition",
+           "Why is Mathematics eveywhere???",
+            "Syncing with database..."
+        ];
+        
+        let sIndex = 0;
+        setInterval(() => {
+            sIndex = (sIndex + 1) % statuses.length;
+            document.getElementById('status-text').innerText = statuses[sIndex];
+        }, 3000);
+
+
+        // --- 3. CHART INITIALIZATION ---
+        // We create empty charts first, then fill them with data later
+        
+        // Chart 1: Balance (Pie)
+        const ctx1 = document.getElementById('balanceChart').getContext('2d');
+        const balanceChart = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Batsmen', 'Bowlers', 'Others'],
+                datasets: [{
+                    data: [0, 0, 0],
+                    backgroundColor: ['#ff0055', '#00ccff', '#ffcc00'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+        });
+
+        // Chart 2: Improvement (Bar)
+        const ctx2 = document.getElementById('improveChart').getContext('2d');
+        const improveChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Previous Match', 'Current Match'],
+                datasets: [{
+                    label: 'Performance Rating',
+                    data: [0, 0],
+                    backgroundColor: ['#444444', '#00ff88'],
+                    borderRadius: 5
+                }]
+            },
+            options: { 
+                scales: { 
+                    y: { beginAtZero: true, grid: { color: '#333' }, ticks: { color: '#888' } },
+                    x: { ticks: { color: '#fff' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Chart 3: Bowling (Pie)
+        const ctx3 = document.getElementById('bowlingChart').getContext('2d');
+        const bowlingChart = new Chart(ctx3, {
+            type: 'pie',
+            data: {
+                labels: ['Spinners', 'Fast Bowlers'],
+                datasets: [{
+                    data: [0, 0],
+                    backgroundColor: ['#7a00ff', '#ff7300'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+        });
+
+
+        // --- 4. DATA FETCHING ---
+        async function updateCharts() {
+            if(!SHEET_CSV_URL) {
+                applyData(defaultData);
+                return;
+            }
+
+            try {
+                const res = await fetch(SHEET_CSV_URL);
+                const text = await res.text();
+                const rows = text.split('\n').slice(1); // Skip header
+
+                // Parse the sheet data
+                // Expected Row Format: Category, Value
+                // Row 0: Batsmen Val
+                // Row 1: Bowlers Val
+                // Row 2: Others Val
+                // Row 3: Previous Val
+                // Row 4: Current Val
+                // Row 5: Spin Val
+                // Row 6: Fast Val
+                // Row 7: Tip Text
+
+                // Simple parser assuming fixed order for simplicity
+                const vals = rows.map(r => r.split(',')[1]); // Get 2nd column
+                
+                const newData = {
+                    balance: [parseFloat(vals[0]), parseFloat(vals[1]), parseFloat(vals[2])],
+                    improvement: [parseFloat(vals[3]), parseFloat(vals[4])],
+                    bowling: [parseFloat(vals[5]), parseFloat(vals[6])],
+                    tip: rows[7].split(',')[1] // Text tip
+                };
+
+                applyData(newData);
+
+            } catch(e) {
+                console.error("AMIA Error:", e);
+                applyData(defaultData);
+            }
+        }
+
+        function applyData(data) {
+            // Update Balance Chart
+            balanceChart.data.datasets[0].data = data.balance;
+            balanceChart.update();
+
+            // Update Improvement Chart
+            improveChart.data.datasets[0].data = data.improvement;
+            improveChart.update();
+
+            // Update Bowling Chart
+            bowlingChart.data.datasets[0].data = data.bowling;
+            bowlingChart.update();
+
+            // Update Tips
+            const tipBox = document.getElementById('tips-text');
+            tipBox.innerHTML = `> ANALYSIS COMPLETE.<br>> <span style="color:white">${data.tip}</span>`;
+        }
+
+        updateCharts();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournaments - Young 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-main: 'Poppins', sans-serif;
+            --bg-dark: #0f0c29;
+            /* Deep Space Gradient Background */
+            --bg-gradient: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+            /* Warm to Cool Text Gradient (Blue -> Orange -> Red) */
+            --header-gradient: linear-gradient(90deg, #4facfe 0%, #f093fb 50%, #ff512f 100%);
+            --card-surface: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.1);
+            --accent-red: #ff512f;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 35px;
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            padding: 20px;
+            padding-bottom: 80px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- TOURNAMENT CARD --- */
+        .tourna-card {
+            background: var(--card-surface);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        .tourna-header {
+            background: linear-gradient(90deg, rgba(79, 172, 254, 0.2), rgba(255, 81, 47, 0.2));
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tourna-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tourna-status {
+            font-size: 0.7rem;
+            background: #ff512f;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Match List Items */
+        .match-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .match-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .match-item:last-child { border-bottom: none; }
+
+        .teams {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+        
+        .match-vs {
+            color: #888;
+            font-size: 0.8rem;
+            margin: 0 5px;
+        }
+
+        .match-date {
+            font-size: 0.75rem;
+            color: #aaa;
+            background: rgba(255,255,255,0.05);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Footer & Loader */
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+            margin-top: 40px;
+        }
+
+        #loader {
+            text-align: center;
+            padding: 40px;
+            color: #4facfe;
+            font-style: italic;
+        }
+        
+        .nav-back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark */
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10000; /* Ensure it's on top of everything */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.nav-back-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.1);
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="window.history.back()">←</button>
+        <h1 class="page-title">Tournaments</h1>
+    </header>
+
+    <div class="container" id="tournament-container">
+        <div id="loader">Loading Tournaments...</div>
+        
+        </div>
+        
+        <button class="nav-back-btn" onclick="goBack()">
+    ←
+</button>
+
+    <footer class="footer">
+        <p>© Copyright 2025 Young 11 Cricket Club.</p>
+    </footer>
+
+
+    <script>
+        // --- 1. GOOGLE SHEET CONFIGURATION ---
+        // Headers required in Sheet: Tournament, Team1, Team2, Date, Status
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQzqpH_swysUc5W2kIY7K4RpAN6mwORhKCUJFmKWhrZmFNOIXN8reYxdemdhVjyODqaq-tmtC8v0Eqs/pub?gid=0&single=true&output=csv"; 
+
+        // --- 2. SAMPLE DATA (Used if no sheet is connected) ---
+        const sampleData = [
+            { tournament: "District Cup 2026", team1: "Young 11", team2: "Royal Strikers", date: "12 Aug", status: "Upcoming" },
+            { tournament: "District Cup 2026", team1: "Super Kings", team2: "Young 11", date: "15 Aug", status: "Upcoming" },
+            { tournament: "Winter League", team1: "Young 11", team2: "Blue Tigers", date: "20 Dec", status: "Completed" },
+            { tournament: "Winter League", team1: "Eagles XI", team2: "Young 11", date: "24 Dec", status: "Completed" }
+        ];
+
+        // --- 3. RENDER FUNCTION ---
+        function renderTournaments(data) {
+            const container = document.getElementById('tournament-container');
+            const loader = document.getElementById('loader');
+            
+            // Group data by Tournament Name
+            const grouped = {};
+            data.forEach(match => {
+                if (!grouped[match.tournament]) {
+                    grouped[match.tournament] = [];
+                }
+                grouped[match.tournament].push(match);
+            });
+
+            // HTML Generation
+            let htmlContent = "";
+            
+            for (const [tournamentName, matches] of Object.entries(grouped)) {
+                // Determine status badge from the first match (or you can customize logic)
+                const statusBadge = matches[0].status || "Active";
+                
+                let matchesHtml = "";
+                matches.forEach(m => {
+                    matchesHtml += `
+                        <li class="match-item">
+                            <span class="teams">${m.team1} <span class="match-vs">VS</span> ${m.team2}</span>
+                            <span class="match-date">${m.date}</span>
+                        </li>
+                    `;
+                });
+
+                htmlContent += `
+                    <div class="tourna-card">
+                        <div class="tourna-header">
+                            <span class="tourna-name">${tournamentName}</span>
+                            <span class="tourna-status">${statusBadge}</span>
+                        </div>
+                        <ul class="match-list">
+                            ${matchesHtml}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            loader.style.display = 'none';
+            container.innerHTML += htmlContent; // Append to container
+        }
+
+        // --- 4. FETCH DATA ---
+        async function fetchData() {
+            if (!SHEET_CSV_URL) {
+                setTimeout(() => renderTournaments(sampleData), 800);
+                return;
+            }
+
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                const text = await response.text();
+                
+                // Parse CSV
+                const rows = text.split('\n').slice(1);
+                const parsed = rows.map(row => {
+                    const cols = row.split(',');
+                    if (cols.length < 5) return null;
+                    return {
+                        tournament: cols[0],
+                        team1: cols[1],
+                        team2: cols[2],
+                        date: cols[3],
+                        status: cols[4] ? cols[4].replace('\r', '') : "Active"
+                    };
+                }).filter(x => x);
+
+                renderTournaments(parsed);
+
+            } catch (error) {
+                console.error("Error:", error);
+                renderTournaments(sampleData);
+            }
+        }
+
+        fetchData();
+        
+        function goBack() {
+    // If we are on a main sub-page, go to Home Menu.
+    // If we are deep inside (like team.html), go back to Dashboard (web.html)
+
+    const path = window.location.pathname;
+
+    // If on Dashboard, go to Main Menu
+    if(path.includes('web.html')) {
+        window.location.href = 'home.html';
+    } 
+    // If on Register, go to Main Menu
+    else if(path.includes('register.html')) {
+        window.location.href = 'home.html';
+    }
+    // For everything else (Team, Matches, etc.), simple history back works best
+    else {
+        window.history.back();
+    }
+}
+    </script>
+</body>
+</html>

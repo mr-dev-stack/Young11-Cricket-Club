@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Squad - Young 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Styles --- */
+        :root {
+            --font-main: 'Poppins', sans-serif;
+            /* "Rose Ember" Sharp Gradient Background */
+            --bg-gradient: linear-gradient(135deg, #1f0505 0%, #4a0d0d 50%, #1f0505 100%);
+            /* "Mango Bloom" Text Gradient (Red-Orange) */
+            --text-gradient: linear-gradient(90deg, #ff416c, #ff4b2b, #ff9068);
+            --card-bg: rgba(30, 30, 30, 0.6); /* Glassmorphism */
+            --border-color: rgba(255, 65, 108, 0.3);
+            --text-color: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background: var(--bg-gradient);
+            background-attachment: fixed; /* Keeps gradient fixed while scrolling */
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        /* --- HEADER SECTION --- */
+        header {
+            text-align: center;
+            padding: 30px 20px 10px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(31, 5, 5, 0.9); /* Semi-transparent background */
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 2px;
+            /* Mango Bloom Gradient Text */
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(255, 65, 108, 0.3));
+        }
+
+        /* Subtle Changing Text */
+        .subtle-msg-container {
+            height: 20px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        #subtle-text {
+            font-size: 0.85rem;
+            color: #ff9068; /* Soft Orange */
+            opacity: 0.8;
+            font-style: italic;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 35px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .container {
+            padding: 20px;
+            padding-bottom: 80px;
+            max-width: 600px; /* Limits width on larger screens */
+            margin: 0 auto;
+        }
+
+        /* Search Bar */
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .search-box:focus {
+            border-color: #ff9068;
+            box-shadow: 0 0 15px rgba(255, 65, 108, 0.2);
+        }
+
+        /* Pop-up Card Table Container */
+        .table-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 5px; /* Inner padding */
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            overflow: hidden; /* Clips corners */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        /* Table Header */
+        thead tr {
+            background: linear-gradient(90deg, rgba(255, 65, 108, 0.2), rgba(0,0,0,0));
+        }
+
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #ff9068;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        /* Table Body */
+        td {
+            padding: 18px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        /* Row Animation & Hover */
+        tbody tr {
+            transition: background 0.2s;
+        }
+        tbody tr:hover {
+            background: rgba(255, 65, 108, 0.1);
+        }
+
+        /* Position Badges */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .bat { background: rgba(255, 152, 0, 0.2); color: #ffa726; border: 1px solid rgba(255, 152, 0, 0.3); }
+        .bowl { background: rgba(33, 150, 243, 0.2); color: #42a5f5; border: 1px solid rgba(33, 150, 243, 0.3); }
+        .keep { background: rgba(255, 235, 59, 0.15); color: #ffee58; border: 1px solid rgba(255, 235, 59, 0.3); }
+        .all { background: rgba(156, 39, 176, 0.2); color: #ab47bc; border: 1px solid rgba(156, 39, 176, 0.3); }
+
+        /* SP Score Circle */
+        .sp-circle {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            font-weight: bold;
+            padding: 5px 0;
+            width: 40px;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(255, 65, 108, 0.4);
+        }
+
+        /* --- FOOTER --- */
+        .main-footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #888;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading Spinner */
+        #loader {
+            text-align: center;
+            padding: 30px;
+            color: #ff9068;
+            font-style: italic;
+        }
+
+        /* Responsive Fix for small phones */
+        @media (max-width: 360px) {
+            th, td { padding: 12px 8px; font-size: 0.85rem; }
+            .page-title { font-size: 2rem; }
+        }
+        
+        .nav-back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent dark */
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10000; /* Ensure it's on top of everything */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.nav-back-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.1);
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="back-btn" onclick="window.history.back()">←</button>
+        <h1 class="page-title">Team</h1>
+        <div class="subtle-msg-container">
+            <div id="subtle-text">Loading insights...</div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <input type="text" id="searchInput" class="search-box" placeholder="Search player..." onkeyup="filterTable()">
+
+        <div class="table-card">
+            <div style="overflow-x: auto;"> <table id="squadTable">
+                    <thead>
+                        <tr>
+                            <th width="10%">#</th>
+                            <th width="40%">Name</th>
+                            <th width="35%">Role</th>
+                            <th width="15%">SP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        </tbody>
+                </table>
+            </div>
+            <div id="loader">We love loading!</div>
+        </div>
+
+        <footer class="main-footer">
+            <p>All active players are subject to automated stats analysis and captain negotiations.</p>
+            <p>© Copyright 2025 Young 11 Cricket Club.</p>
+        </footer>
+
+    </div>
+
+<button class="nav-back-btn" onclick="goBack()">
+    ←
+</button>
+    <script>
+        // --- 1. GOOGLE SHEETS CONNECTION ---
+        // Paste your published CSV link inside these quotes:
+        const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbgrniU97N-klrbAhno7g5wC8L93JwH1N8vlgl1X-r-xvFtVMdKKpnv30GGxIUrXRrRTL9_B4rDhIb/pub?gid=0&single=true&output=csv"; 
+
+        // --- 2. SUBTLE TEXT CHANGER (Every 5 Seconds) ---
+        const subtleMessages = [
+            "Analyzing player stats...",
+            "Updating squad lists...",
+            "Checking recent form...",
+            "Calculating SP points...",
+            "Syncing with captain...",
+           "Football is love...",
+            "Verifying fitness levels...",
+            "Have you tried vollyball?!."
+        ];
+
+        let msgIndex = 0;
+        const msgElement = document.getElementById('subtle-text');
+
+        function updateSubtleText() {
+            msgElement.style.opacity = 0; // Fade out
+            setTimeout(() => {
+                msgIndex = (msgIndex + 1) % subtleMessages.length;
+                msgElement.innerText = subtleMessages[msgIndex];
+                msgElement.style.opacity = 0.8; // Fade in
+            }, 500);
+        }
+        setInterval(updateSubtleText, 4000); // 4 Seconds
+
+
+        // --- 3. DATA HANDLING ---
+        
+        // Sample 11 Players (Fallback Data)
+        const fallbackData = [
+            { id: 1, name: "Haziq", role: "Batsman", sp: "13.4" },
+            { id: 2, name: "Mir Shakeel", role: "All-Rounder", sp: "12.8" },
+            { id: 3, name: "Murtaza", role: "Bowler (Fast)", sp: "11.5" },
+            { id: 4, name: "Aaliyan", role: "Wicket Keeper", sp: "10.2" },
+            { id: 5, name: "Zaid", role: "Bowler (Spin)", sp: "14.0" },
+            { id: 6, name: "Sahil", role: "Batsman", sp: "09.5" },
+            { id: 7, name: "Faizan", role: "All-Rounder", sp: "11.0" },
+            { id: 8, name: "Umer", role: "Bowler (Fast)", sp: "10.8" },
+            { id: 9, name: "Sameer", role: "Batsman", sp: "08.9" },
+            { id: 10, name: "Kamran", role: "Bowler (Spin)", sp: "12.1" },
+            { id: 11, name: "Basit", role: "All-Rounder", sp: "10.5" }
+        ];
+
+        function getBadgeClass(role) {
+            role = role.toLowerCase();
+            if(role.includes('bat')) return 'bat';
+            if(role.includes('bowl')) return 'bowl';
+            if(role.includes('keep')) return 'keep';
+            return 'all';
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = "";
+            
+            data.forEach(p => {
+                const row = `
+                    <tr>
+                        <td>${p.id}</td>
+                        <td style="font-weight: 600; color: white;">${p.name}</td>
+                        <td><span class="badge ${getBadgeClass(p.role)}">${p.role}</span></td>
+                        <td><div class="sp-circle">${p.sp}</div></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+            document.getElementById('loader').style.display = 'none';
+        }
+
+        async function fetchSheetData() {
+            if(!SHEET_CSV_URL) {
+                // Simulate loading delay for effect
+                setTimeout(() => renderTable(fallbackData), 1000);
+                return;
+            }
+
+            try {
+                const res = await fetch(SHEET_CSV_URL);
+                const csvText = await res.text();
+                
+                // Simple CSV Parser
+                const rows = csvText.split('\n').slice(1); // Skip header
+                const parsed = rows.map(r => {
+                    const c = r.split(','); // Assuming standard CSV
+                    if(c.length < 4) return null;
+                    return { id: c[0], name: c[1], role: c[2], sp: c[3] };
+                }).filter(x => x);
+
+                renderTable(parsed);
+            } catch (err) {
+                console.error("Sheet Error:", err);
+                renderTable(fallbackData); // Use backup if internet fails
+            }
+        }
+
+        // Search Filter
+        function filterTable() {
+            const filter = document.getElementById('searchInput').value.toUpperCase();
+            const tr = document.getElementById('squadTable').getElementsByTagName('tr');
+            for (let i = 1; i < tr.length; i++) {
+                let td = tr[i].getElementsByTagName('td')[1];
+                if (td) {
+                    let txt = td.textContent || td.innerText;
+                    tr[i].style.display = txt.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+                }       
+            }
+        }
+
+        // Initialize
+        fetchSheetData();
+
+function goBack() {
+    // If we are on a main sub-page, go to Home Menu.
+    // If we are deep inside (like team.html), go back to Dashboard (web.html)
+
+    const path = window.location.pathname;
+
+    // If on Dashboard, go to Main Menu
+    if(path.includes('web.html')) {
+        window.location.href = 'home.html';
+    } 
+    // If on Register, go to Main Menu
+    else if(path.includes('register.html')) {
+        window.location.href = 'home.html';
+    }
+    // For everything else (Team, Matches, etc.), simple history back works best
+    else {
+        window.history.back();
+    }
+}
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Versions - Young 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; background: #0d0d0d; color: white; font-family: 'Poppins', sans-serif; padding: 20px; }
+        .page-header { font-size: 2rem; font-weight: 800; margin-bottom: 30px; color: #444; text-transform: uppercase; border-bottom: 2px solid #222; padding-bottom: 10px; }
+        
+        .version-block {
+            border-left: 3px solid #333; padding-left: 20px; margin-bottom: 40px; position: relative;
+        }
+        
+        /* The Dot on the timeline */
+        .version-block::before {
+            content: ''; position: absolute; left: -8.5px; top: 0; width: 14px; height: 14px;
+            background: #333; border-radius: 50%;
+        }
+
+        /* Active/Latest Version Style */
+        .latest { border-left-color: #00e676; }
+        .latest::before { background: #00e676; box-shadow: 0 0 10px #00e676; }
+        .latest .v-title { color: #00e676; }
+
+        .v-title { font-size: 1.5rem; font-weight: 700; margin: 0 0 10px 0; }
+        .v-date { font-size: 0.8rem; color: #666; margin-bottom: 15px; display: block; }
+        
+        ul { padding-left: 15px; margin: 0; }
+        li { color: #ccc; margin-bottom: 8px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">Versionlog</div>
+
+    <div class="version-block latest">
+        <h2 class="v-title">Version 1.0 (Official)</h2>
+        <span class="v-date">Release: Feb 2026</span>
+        <ul>
+            <li>🚀 Official Global Launch</li>
+            <li>✨ Added AMIA™ Analysis System</li>
+            <li>📊 Integrated Google Sheets Live Sync</li>
+            <li>🔐 Added Captcha Security Gate</li>
+            <li>📱 New Mobile-First Dashboard UI</li>
+        </ul>
+    </div>
+
+    <div class="version-block">
+        <h2 class="v-title">Beta 0.9</h2>
+        <span class="v-date">Jan 2026</span>
+        <ul>
+            <li>Testing Squad List Tables</li>
+            <li>Initial Layout Design</li>
+            <li>Instalising AMAI™ System</li>
+        </ul>
+    </div>
+
+    <script src="toolbar.js"></script>
+</body>
+</html>

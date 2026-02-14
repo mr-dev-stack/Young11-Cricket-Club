@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Young 11 Cricket Club</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Styles --- */
+        :root {
+            --bg-dark: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8); /* Glassmorphism background */
+            --text-color: #e0e0e0;
+            --primary-gradient: linear-gradient(90deg, #00a1ff, #00ff8f);
+            --input-bg: #2a2a2a;
+            --input-border: #444;
+            --focus-color: #00a1ff;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+            padding: 30px 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Header Styles */
+        .register-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .register-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Dynamic Tagline Section */
+        .tagline-container {
+            background: rgba(0, 161, 255, 0.1);
+            border-left: 4px solid #00ff8f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 35px;
+            text-align: center;
+            font-style: italic;
+            color: #bbb;
+            min-height: 24px; /* Prevent layout shift */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #dynamic-tagline {
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        /* Animations for Tagline */
+        .pop-in {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-out forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.9); }
+        }
+
+        /* Form Card Styles */
+        .form-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .required-star {
+            color: #ff4b2b;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 2px solid var(--input-border);
+            background: var(--input-bg);
+            color: #fff;
+            font-family: var(--font-main);
+            font-size: 1rem;
+            box-sizing: border-box; /* Important for padding */
+            transition: all 0.3s ease;
+            outline: none;
+            appearance: none; /* Removes default dropdown arrow */
+        }
+
+        /* Custom arrow for select boxes */
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            font-size: 0.8rem;
+            color: #888;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: var(--focus-color);
+            box-shadow: 0 0 0 4px rgba(0, 161, 255, 0.1);
+            background: #333;
+        }
+        
+        .form-input::placeholder {
+            color: #777;
+        }
+
+        /* Submit Button Styles */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            background: var(--primary-gradient);
+            color: #000;
+            font-family: var(--font-main);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 255, 143, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 8px 25px rgba(0, 255, 143, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Footer Styles */
+        .main-footer {
+            text-align: center;
+            padding: 25px;
+            font-size: 0.9rem;
+            color: #777;
+            border-top: 1px solid #222;
+            margin-top: auto; /* Pushes footer to bottom */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="register-header">
+            <h1 class="register-title">Register as a Player</h1>
+        </header>
+
+        <div class="tagline-container">
+            <span id="dynamic-tagline" class="pop-in">"Welcome to the squad!"</span>
+        </div>
+
+        <div class="form-card">
+            <form action="#" method="POST">
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">Name<span class="required-star">*</span></label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="class" class="form-label">Class<span class="required-star">*</span></label>
+                    <div class="select-wrapper">
+                        <select id="class" name="class" class="form-select" required>
+                            <option value="" disabled selected>Select your class</option>
+                            <option value="5th">5th</option>
+                            <option value="6th">6th</option>
+                            <option value="7th">7th</option>
+                            <option value="8th">8th</option>
+                            <option value="9th">9th</option>
+                            <option value="10th">10th</option>
+                            <option value="11th">11th</option>
+                            <option value="12th">12th</option>
+                            <option value="Not Mentioned">Not Mentioned</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="position" class="form-label">Position<span class="required-star">*</span></label>
+                    <div class="select-wrapper">
+                        <select id="position" name="position" class="form-select" required>
+                            <option value="" disabled selected>Select your position</option>
+                            <option value="Batsman">Batsman</option>
+                            <option value="Bowler (Spinner)">Bowler (Spinner)</option>
+                            <option value="Bowler (Fast)">Bowler (Fast)</option>
+                            <option value="Wicket Keeper">Wicket Keeper</option>
+                            <option value="All-Rounder">All-Rounder</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Application</button>
+
+            </form>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <p>© Copyright 2026 ®Haziq.</p>
+    </footer>
+
+    <script>
+        /* --- JavaScript Logic --- */
+        
+        // List of Cricket Taglines
+        const taglines = [
+            "We hate ducks!",
+            "Hit hard, run fast.",
+            "Spin it to win it.",
+            "Pace like fire.",
+            "Catches win matches.",
+            "Wide to hide.",
+            "Respect the game.",
+            "Teamwork makes the dream work.",
+            "Every run counts.",
+            "Also try football.",
+            "Defend like a lion.",
+            "Attack like a tiger.",
+            "Keep your eye on the ball.",
+            "Do you know about football.",
+            "Born to play.",
+            "Straight down the ground.",
+            "Rohit or Kohli?.",
+            "Boundary bound.",
+            "Six hitting machine.",
+            "Wicket taking delivery.",
+            "The gentleman's game.",
+            "Leave it all on the pitch.",
+            "Homework first.",
+            "Victory belongs to the disciplined.",
+            "Train hard, play easy.",
+            "We love you.",
+            "Unleash your potential.",
+            "Be a game changer.",
+            "The pitch is calling.",
+            "Ready for the challenge?",
+            "Dominate the game.",
+            "Play with heart.",
+            "Rise above the rest.",
+            "Is your syllabus Complete?",
+            "Legend in the making.",
+            "It's not just a game.",
+            "Play fair, play hard.",
+            "Your time is now.",
+            "Believe in your team.",
+            "Strive for excellence.",
+            "Nothing but net... wait, wrong sport.",
+            "Timing is everything.",
+            "Read the pitch.",
+            "Outsmart the opposition.",
+            "Young-11 Cricket Club!!!",
+            "The sound of leather on willow.",
+            "A century of dreams.",
+            "From the streets to the stadium.",
+            "Our blood is green (for the pitch).",
+            "Heroes are made here.",
+            "One team, one dream."
+        ];
+
+        const taglineElement = document.getElementById('dynamic-tagline');
+        let currentIndex = 0;
+
+        function changeQuote() {
+            // 1. Start fade out animation
+            taglineElement.classList.remove('pop-in');
+            taglineElement.classList.add('fade-out');
+
+            setTimeout(() => {
+                // 2. Change text after fade out is complete (0.5s)
+                currentIndex = (currentIndex + 1) % taglines.length;
+                taglineElement.innerText = `"${taglines[currentIndex]}"`;
+
+                // 3. Start pop-in animation
+                taglineElement.classList.remove('fade-out');
+                taglineElement.classList.add('pop-in');
+            }, 500); // Wait for 500ms fade-out animation to finish
+        }
+
+        // Initial call to set a random starting quote (optional)
+        currentIndex = Math.floor(Math.random() * taglines.length);
+        taglineElement.innerText = `"${taglines[currentIndex]}"`;
+
+        // Change quote every 4 seconds
+        setInterval(changeQuote, 4000);
+    </script>
+</body>
+</html>

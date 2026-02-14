@@ -1,0 +1,372 @@
+html {
+    scroll-behavior: smooth; /* This adds the sliding animation */
+}
+
+:root {
+    --primary-orange: linear-gradient(45deg, #ff9800, #f44336);
+    --shiny-red: linear-gradient(90deg, #ff4b2b, #ff416c);
+    --shiny-green: linear-gradient(90deg, #00b09b, #96c93d);
+    --shiny-blue: linear-gradient(90deg, #2193b0, #6dd5ed);
+    --bg-dark: #121212;
+    --card-bg: #1e1e1e;
+    --font-main: 'Poppins', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    color: white;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.hidden { display: none !important; }
+
+/* Fixed Version Badge */
+.version-badge {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #4CAF50;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 1000;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+}
+
+/* --- CAPTCHA PAGE LAYOUT --- */
+.full-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes Header top, Center middle, Footer bottom */
+    align-items: center;
+    padding: 40px 20px 20px;
+    box-sizing: border-box;
+}
+
+.captcha-header {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.welcome-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.welcome-text .highlight {
+    color: #ff9800;
+    font-weight: 800;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+}
+
+.welcome-text .sub-text {
+    font-size: 0.9rem;
+    color: #aaa;
+    font-weight: 300;
+}
+
+.captcha-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 50px; /* Pushes it slightly up from true center */
+}
+
+.logo-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Makes the container round */
+    border: 2px dashed #555;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* This clips the square corners of the image */
+}
+
+.low-opacity-logo {
+    width: 100%;
+    height: 100%;
+    opacity: 50; 
+    object-fit: cover; /* This crops the square image into the circle */
+    object-position: center; /* Keeps the center of the logo visible */
+}
+
+.captcha-box {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 25px;
+    border-radius: 16px;
+    width: 85%;
+    max-width: 320px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    border: 1px solid #333;
+    text-align: center;
+}
+
+.captcha-display {
+    background: #000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#generated-captcha {
+    font-family: 'Courier New', monospace;
+    font-size: 1.8rem;
+    letter-spacing: 4px;
+    font-weight: bold;
+    color: #ffeb3b;
+    text-shadow: 2px 2px 5px rgba(255, 235, 59, 0.3);
+    /* Slant and strike-through effect for realism */
+    text-decoration: line-through;
+    font-style: italic;
+}
+
+.refresh-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+#captcha-input {
+    width: 90%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: white;
+    font-family: var(--font-main);
+    text-align: center;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    outline: none;
+}
+
+#captcha-input:focus { border-color: #ff9800; }
+
+#captcha-submit {
+    background: linear-gradient(to right, #e53935, #d32f2f);
+    color: white;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 25px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+    cursor: pointer;
+}
+
+#error-msg {
+    color: #ff4b2b;
+    font-size: 0.8rem;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.captcha-footer {
+    width: 100%;
+    text-align: right;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* --- LOADING SCREEN --- */
+#loading-screen {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    border: 4px solid #333;
+    border-top: 4px solid #ff9800; /* Orange loading */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 20px;
+}
+
+#loader-text {
+    font-family: var(--font-main);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    font-weight: 300;
+    color: white;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* --- HOME PAGE --- */
+.club-title-gradient {
+    text-align: center;
+    background: linear-gradient(to bottom, #fff700, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 20px 0 10px;
+    font-weight: 800;
+    font-size: 1.8rem;
+}
+
+/* Taller Cards for Scrolling */
+.content-scroll {
+    padding: 20px;
+    padding-bottom: 100px;
+}
+
+.pop-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+    min-height: 250px; /* INCREASED HEIGHT to force scroll */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+/* Gradient Borders */
+.border-red { border-image: var(--shiny-red) 1; border-width: 2px; border-style: solid;}
+.border-green { border-image: var(--shiny-green) 1; border-width: 2px; border-style: solid;}
+.border-blue { border-image: var(--shiny-blue) 1; border-width: 2px; border-style: solid;}
+.border-white { border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 0 15px rgba(255,255,255,0.1); }
+
+/* Typography inside cards */
+.pop-card h3 {
+    margin-top: 0;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.pop-card p {
+    line-height: 1.6;
+    color: #ccc;
+    font-size: 1rem;
+}
+
+/* Button & Nav Styles remain similar but cleaner */
+.top-nav { display: flex; justify-content: space-around; background: #222; padding: 15px 0; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
+.top-nav a { color: #ddd; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+
+.bottom-toolbar {
+    position: fixed; bottom: 0; width: 100%; height: 65px; background: #151515; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #333; z-index: 999;
+}
+.tool-btn img { width: 28px; height: 28px; filter: invert(0.8); }
+
+.register-trigger-btn {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    background: linear-gradient(45deg, #f09819, #edde5d); /* Shiny Yellow-Orange */
+    border: none;
+    padding: 12px 0;
+    border-radius: 25px;
+    color: #333; /* Dark text for better contrast on yellow */
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: 0 5px 15px rgba(240, 152, 25, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.register-trigger-btn:active {
+    transform: scale(0.98);
+}
+
+.visit-web-btn {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px 0;
+    
+    /* Blue to Red Gradient */
+    background: linear-gradient(45deg, #005bea, #e43a15); 
+    
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    /* Glow effect matching the blue start color */
+    box-shadow: 0 4px 15px rgba(0, 91, 234, 0.4); 
+    
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.visit-web-btn:active {
+    transform: scale(0.98);
+}
+
+/* Container to keep it steady */
+.hero-text-container {
+    height: 40px; /* Prevents jumping */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* The Text Style */
+.glow-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    /* The Breathtaking Gradient */
+    background: linear-gradient(90deg, #00d2ff, #f0e676, #00d2ff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* The Animation State (Hidden by default) */
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    filter: blur(5px);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The "Visible" State (JS will add this) */
+.glow-text.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    animation: shine 3s linear infinite; /* Keeps the gradient moving */
+}
+
+/* Background Shine Animation */
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
