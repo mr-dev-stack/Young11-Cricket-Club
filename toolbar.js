@@ -34,19 +34,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     toolbar.innerHTML = `
         <button class="tool-btn" onclick="window.location.href='info.html'">
-            <img src="assets/info.png" class="tool-icon" alt="Info">
+            <img src="https://github.com/mr-dev-stack/Young11-Cricket-Club/blob/8d0a596c850d9f789c4681eccabd3b20a958bbee/assest/info.png" class="tool-icon" alt="Info">
         </button>
 
         <button class="tool-btn" onclick="window.location.href='social.html'">
-            <img src="assets/social.png" class="tool-icon" alt="Social">
+            <img src="https://github.com/mr-dev-stack/Young11-Cricket-Club/blob/8d0a596c850d9f789c4681eccabd3b20a958bbee/assest/social.png" class="tool-icon" alt="Social">
         </button>
 
         <button class="tool-btn" onclick="window.location.href='about.html'">
-            <img src="assets/about.png" class="tool-icon" alt="Dev">
+            <img src="https://github.com/mr-dev-stack/Young11-Cricket-Club/blob/8d0a596c850d9f789c4681eccabd3b20a958bbee/assest/about.png" class="tool-icon" alt="Dev">
         </button>
 
         <button class="tool-btn" onclick="window.location.href='version.html'">
-            <img src="assets/version.png" class="tool-icon" alt="Version">
+            <img src="https://github.com/mr-dev-stack/Young11-Cricket-Club/blob/8d0a596c850d9f789c4681eccabd3b20a958bbee/assest/version.png" class="tool-icon" alt="Version">
         </button>
     `;
 
